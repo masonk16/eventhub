@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load tabler %}
+{% block page_title %}What's on{% endblock %}
+{% block content %}
+<form method="get" class="card mb-4">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label" for="q">Search</label>
+        <input class="form-control" id="q" name="q" value="{{ filters.q }}" placeholder="Events, venues, organizers">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label" for="city">City</label>
+        <input class="form-control" id="city" name="city" value="{{ filters.city }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label" for="category">Category</label>
+        <select class="form-select" id="category" name="category">
+          <option value="">All categories</option>
+          {% for c in categories %}<option value="{{ c.slug }}" {% if filters.category == c.slug %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2 d-grid"><button class="btn btn-primary">Filter</button></div>
+    </div>
+    <div class="mt-3 d-flex flex-wrap gap-3">
+      <label class="form-check"><input class="form-check-input" type="checkbox" name="free" value="1" {% if filters.free %}checked{% endif %}><span class="form-check-label">Free</span></label>
+      <label class="form-check"><input class="form-check-input" type="checkbox" name="online" value="1" {% if filters.online %}checked{% endif %}><span class="form-check-label">Online</span></label>
+      <label class="form-check"><input class="form-check-input" type="checkbox" name="verified" value="1" {% if filters.verified %}checked{% endif %}><span class="form-check-label">Verified organizers only</span></label>
+      <label class="form-check"><input class="form-check-input" type="checkbox" name="past" value="1" {% if filters.past %}checked{% endif %}><span class="form-check-label">Past events</span></label>
+    </div>
+  </div>
+</form>
+
+<div class="row row-cards">
+  {% for event in page %}{% include "partials/event_card.html" %}
+  {% empty %}
+  <div class="col-12">
+    <div class="empty">
+      <p class="empty-title">No events match</p>
+      <p class="empty-subtitle text-secondary">Try fewer filters, or post the event yourself.</p>
+      <div class="empty-action"><a class="btn btn-primary" href="{% url 'events:create' %}">Post an event</a></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if page.has_other_pages %}
+<ul class="pagination justify-content-center mt-4">
+  <li class="page-item {% if not page.has_previous %}disabled{% endif %}">
+    <a class="page-link" {% if page.has_previous %}href="?{{ qs }}&page={{ page.previous_page_number }}"{% endif %}>Previous</a>
+  </li>
+  <li class="page-item disabled"><span class="page-link">Page {{ page.number }} of {{ page.paginator.num_pages }}</span></li>
+  <li class="page-item {% if not page.has_next %}disabled{% endif %}">
+    <a class="page-link" {% if page.has_next %}href="?{{ qs }}&page={{ page.next_page_number }}"{% endif %}>Next</a>
+  </li>
+</ul>
+{% endif %}
+{% endblock %}

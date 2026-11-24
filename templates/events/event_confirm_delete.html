@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block page_title %}Delete event{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 32rem">
+  <form method="post" class="card-body">{% csrf_token %}
+    <p class="mb-3">Delete <strong>{{ event.title }}</strong>? This removes the event for good.</p>
+    <button class="btn btn-danger">Delete event</button>
+    <a class="btn" href="{{ event.get_absolute_url }}">Keep it</a>
+  </form>
+</div>
+{% endblock %}

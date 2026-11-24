@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Sign in · EventHub{% endblock %}
+{% block page_title %}Sign in{% endblock %}
+{% block content %}
+<div class="row"><div class="col-md-8 col-lg-5">
+  <form method="post" class="card">{% csrf_token %}
+    <div class="card-body">
+      {% include "partials/form_fields.html" %}
+      <input type="hidden" name="next" value="{{ next }}">
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+      <span class="text-secondary">New here? <a href="{% url 'accounts:signup' %}">Create an account</a></span>
+      <button class="btn btn-primary">Sign in</button>
+    </div>
+  </form>
+</div></div>
+{% endblock %}

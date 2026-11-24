@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block page_title %}Verify “{{ event.title }}”{% endblock %}
+{% block content %}
+<p class="text-secondary mb-4" style="max-width: 44rem">Anyone can post for free. Verification shows visitors the listing comes from the real organizer. Choose one method.</p>
+
+<div class="row row-cards">
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title"><i class="ti ti-world me-2"></i>Put a code on your website</h3></div>
+      <div class="card-body">
+        <p>Add this code anywhere on your event page, official website or ticket page (a comment or footer is fine). Then give us that page's address.</p>
+        <p><code class="user-select-all">{{ event.token_snippet }}</code></p>
+        <form method="post">{% csrf_token %}<input type="hidden" name="method" value="website">
+          {% include "partials/form_fields.html" with form=forms.website %}
+          <button class="btn btn-primary">Check the page</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title"><i class="ti ti-mail me-2"></i>Confirm by email</h3></div>
+      <div class="card-body">
+        <p>We email a link to an address on your official website's domain, for example info@yourdomain.com.</p>
+        <form method="post">{% csrf_token %}<input type="hidden" name="method" value="email">
+          {% include "partials/form_fields.html" with form=forms.email %}
+          <button class="btn btn-primary">Send link</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title"><i class="ti ti-user-check me-2"></i>Ask for a manual review</h3></div>
+      <div class="card-body">
+        <p>No website? Tell us how to confirm you run it. A reviewer will check.</p>
+        {% if event.verification_status == 'pending' %}
+          <div class="alert alert-warning mb-0">A request is already waiting for review.</div>
+        {% else %}
+        <form method="post">{% csrf_token %}<input type="hidden" name="method" value="manual">
+          {% include "partials/form_fields.html" with form=forms.manual %}
+          <button class="btn btn-primary">Request review</button>
+        </form>
+        {% endif %}
+        {% for r in requests %}{% if r.status == 'rejected' %}
+          <div class="alert alert-danger mt-3 mb-0">Rejected {{ r.reviewed_at|date:"j M" }}.{% if r.reviewer_note %} {{ r.reviewer_note }}{% endif %}</div>
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

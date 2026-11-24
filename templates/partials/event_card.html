@@ -1,0 +1,29 @@
+<div class="col-md-6 col-lg-4">
+  <div class="card h-100">
+    <div class="row g-0 h-100">
+      <div class="col-auto">
+        <a href="{{ event.get_absolute_url }}" class="d-flex flex-column align-items-center justify-content-center h-100 px-3 bg-yellow-lt text-reset text-decoration-none rounded-start" aria-label="{{ event.start_at|date:'j F' }}">
+          <span class="fw-bold">{{ event.start_at|date:"M" }}</span>
+          <span class="display-6 fw-bold lh-1">{{ event.start_at|date:"j" }}</span>
+          <span class="small">{{ event.start_at|time:"H:i" }}</span>
+        </a>
+      </div>
+      <div class="col">
+        <div class="card-body">
+          <h3 class="card-title mb-1"><a href="{{ event.get_absolute_url }}" class="text-reset">{{ event.title }}</a></h3>
+          <div class="text-secondary small">
+            <i class="ti ti-map-pin"></i>
+            {% if event.is_online %}Online{% else %}{{ event.venue_name }}{% if event.venue_name and event.city %}, {% endif %}{{ event.city }}{% endif %}
+          </div>
+          <div class="text-secondary small mb-2">
+            By {{ event.organizer_name }} ·
+            {% if event.is_free %}Free{% elif event.price_info %}{{ event.price_info }}{% else %}Ticketed{% endif %}
+            {% if event.category %}· {{ event.category }}{% endif %}
+          </div>
+          {% include "partials/verification_badge.html" %}
+          {% if event.status == 'draft' %}<span class="badge bg-orange-lt">Draft</span>{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

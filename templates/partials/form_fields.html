@@ -1,0 +1,17 @@
+{% load tabler %}
+{% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+{% for field in form %}
+<div class="mb-3" id="row-{{ field.html_name }}">
+  {% if field|is_checkbox %}
+    <label class="form-check">
+      {{ field|tabler }}
+      <span class="form-check-label">{{ field.label }}</span>
+    </label>
+  {% else %}
+    <label class="form-label{% if field.field.required %} required{% endif %}" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field|tabler }}
+  {% endif %}
+  {% if field.help_text %}<div class="form-hint">{{ field.help_text|safe }}</div>{% endif %}
+  {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+</div>
+{% endfor %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Create an account · EventHub{% endblock %}
+{% block page_title %}Create an account{% endblock %}
+{% block content %}
+<div class="row"><div class="col-md-8 col-lg-5">
+  <form method="post" class="card">{% csrf_token %}
+    <div class="card-body">
+      <p class="text-secondary">Free for everyone. Choose "Post events" if you promote or organize events.</p>
+      {% include "partials/form_fields.html" %}
+    </div>
+    <div class="card-footer text-end"><button class="btn btn-primary">Create account</button></div>
+  </form>
+</div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+  // Only ask for an organization name when the person wants to post events.
+  const type = document.getElementById("id_user_type");
+  const org = document.getElementById("row-organization_name");
+  const sync = () => { org.hidden = type.value !== "promoter"; };
+  type.addEventListener("change", sync);
+  sync();
+</script>
+{% endblock %}

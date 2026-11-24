@@ -1,0 +1,3 @@
+{% if event.is_verified %}<span class="badge bg-green-lt"><i class="ti ti-rosette-discount-check me-1"></i>Verified organizer</span>
+{% elif event.verification_status == 'pending' %}<span class="badge bg-yellow-lt">Verification pending</span>
+{% else %}<span class="badge bg-secondary-lt">Not verified</span>{% endif %}

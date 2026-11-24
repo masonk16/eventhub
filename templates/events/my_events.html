@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block page_title %}My events{% endblock %}
+{% block page_actions %}<a class="btn btn-primary" href="{% url 'events:create' %}"><i class="ti ti-plus me-1"></i>Post an event</a>{% endblock %}
+{% block content %}
+<div class="row row-cards">
+  {% for event in events %}{% include "partials/event_card.html" %}
+  {% empty %}
+  <div class="col-12">
+    <div class="empty">
+      <p class="empty-title">You haven't posted anything yet</p>
+      <div class="empty-action"><a class="btn btn-primary" href="{% url 'events:create' %}">Post your first event</a></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
